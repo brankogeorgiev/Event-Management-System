@@ -1,0 +1,30 @@
+﻿@model EMS.Domain.Models.Ticket
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Ticket Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketPrice)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TicketPrice)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ScheduledEvent)
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.TicketDisplayString
+            @* @Model.ScheduledEvent.Event.EventName: @Model.ScheduledEvent.ScheduledEventLocation - @Model.ScheduledEvent.ScheduledEventDateTime.Value.ToString("MM/dd/yy, HH:mm") *@
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

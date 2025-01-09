@@ -1,0 +1,52 @@
+﻿@model EMS.Domain.DTO.ScheduledEventDTO
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ScheduledEvent</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="EventId">Select Event</label>
+                @Html.DropDownListFor(model => model.EventId, new SelectList(Model.ListModel, "Id", "EventName"), "Select an Event", new { @class = "form-control", i = "EventId" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ScheduledEventDateTime" class="control-label"></label>
+                <input asp-for="ScheduledEventDateTime" class="form-control" />
+                <span asp-validation-for="ScheduledEventDateTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ScheduledEventLocation" class="control-label"></label>
+                <input asp-for="ScheduledEventLocation" class="form-control" />
+                <span asp-validation-for="ScheduledEventLocation" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ScheduledEventImage" class="control-label"></label>
+                <input asp-for="ScheduledEventImage" class="form-control" />
+                <span asp-validation-for="ScheduledEventImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
