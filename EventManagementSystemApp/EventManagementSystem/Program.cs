@@ -25,10 +25,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
 builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<IScheduledEventService, ScheduledEventService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
+builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
 
 var app = builder.Build();
 

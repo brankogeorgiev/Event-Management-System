@@ -4,6 +4,7 @@ using EMS.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EMS.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250110082747_AddedShoppingCartAndTicketInShoppingCartModelsAndUpdatedTicketModel")]
+    partial class AddedShoppingCartAndTicketInShoppingCartModelsAndUpdatedTicketModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,9 +155,7 @@ namespace EMS.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId")
-                        .IsUnique()
-                        .HasFilter("[OwnerId] IS NOT NULL");
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("ShoppingCart");
                 });
@@ -352,8 +353,8 @@ namespace EMS.Repository.Migrations
             modelBuilder.Entity("EMS.Domain.Models.ShoppingCart", b =>
                 {
                     b.HasOne("EMS.Domain.Identity.Attendee", "Owner")
-                        .WithOne("ShoppingCart")
-                        .HasForeignKey("EMS.Domain.Models.ShoppingCart", "OwnerId");
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
 
                     b.Navigation("Owner");
                 });
@@ -434,12 +435,6 @@ namespace EMS.Repository.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EMS.Domain.Identity.Attendee", b =>
-                {
-                    b.Navigation("ShoppingCart")
                         .IsRequired();
                 });
 

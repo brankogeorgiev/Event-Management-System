@@ -9,6 +9,7 @@ using EMS.Domain.Models;
 using EMS.Repository;
 using EMS.Domain.DTO;
 using EMS.Service.Interface;
+using System.Security.Claims;
 
 namespace EMS.Web.Controllers
 {
@@ -17,15 +18,17 @@ namespace EMS.Web.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IScheduledEventService _scheduledEventService;
         private readonly ITicketService _ticketService;
-
+        private readonly IShoppingCartService _shoppingCartService;
 
         public TicketsController(ApplicationDbContext context, 
             IScheduledEventService scheduledEventService,
-            ITicketService ticketService)
+            ITicketService ticketService,
+            IShoppingCartService shoppingCartService)
         {
             _context = context;
             _scheduledEventService = scheduledEventService;
             _ticketService = ticketService;
+            _shoppingCartService = shoppingCartService;
         }
 
         // GET: Tickets
@@ -156,6 +159,31 @@ namespace EMS.Web.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult AddToShoppingCart(Guid id)
+        {
+            var result = _shoppingCartService.GetTicketInfo(id);
+            if (result != null)
+            {
+                return View(result);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddToShoppingCart(AddToShoppingCartDTO model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
+            var result = _shoppingCartService.AddTicketToShoppingCart(userId, model);
+            if (result != null)
+            {
+                return RedirectToAction("Index", "ShoppingCarts");
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         private bool TicketExists(Guid id)

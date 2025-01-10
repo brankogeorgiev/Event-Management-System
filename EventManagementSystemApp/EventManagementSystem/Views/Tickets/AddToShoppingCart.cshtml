@@ -1,0 +1,29 @@
+﻿@model EMS.Domain.DTO.AddToShoppingCartDTO
+
+<div class="container">
+    <form method="post" asp-action="AddToShoppingCart">
+
+        <input type="hidden" asp-for="SelectedTicketId" value="@Model.SelectedTicketId" class="form-control" />
+
+        <div class="row mt-4">
+            <div class="form-group">
+                <label asp-for="SelectedTicketName" class="control-label">Selected Ticket Name</label>
+                <input asp-for="SelectedTicketName" disabled class="form-control" />
+                <span asp-validation-for="SelectedTicketName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" type="number" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <button type="submit" class="btn btn-success w-25 m-auto py-2 rounded">Add To Cart</button>
+        </div>
+    </form>
+
+</div>

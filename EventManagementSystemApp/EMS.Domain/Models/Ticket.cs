@@ -14,6 +14,7 @@ namespace EMS.Domain.Models
         public Guid? ScheduledEventId{ get; set; }
         [Display(Name = "Scheduled Event")]
         public ScheduledEvent? ScheduledEvent{ get; set; }
+        public virtual ICollection<TicketInShoppingCart>? TicketsInShoppingCart { get; set; }
         public string TicketDisplayString => $"{ScheduledEvent?.Event?.EventName}: {ScheduledEvent?.ScheduledEventLocation} - {ScheduledEvent?.ScheduledEventDateTime.Value.ToString("MM/dd/yy, HH:mm")}";
 
     }
