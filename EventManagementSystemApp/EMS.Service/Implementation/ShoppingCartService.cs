@@ -16,14 +16,20 @@ namespace EMS.Service.Implementation
         private readonly IUserRepository _userRepository;
         private readonly IRepository<Ticket> _ticketRepository;
         private readonly IRepository<ShoppingCart> _shoppingCartRepository;
+        private readonly IRepository<Order> _orderRepository;
+        private readonly IRepository<TicketInOrder> _ticketInOrderRepository;
 
         public ShoppingCartService(IUserRepository userRepository, 
-            IRepository<Ticket> ticketRepository, 
-            IRepository<ShoppingCart> shoppingCartRepository)
+            IRepository<Ticket> ticketRepository,
+            IRepository<ShoppingCart> shoppingCartRepository,
+            IRepository<Order> orderRepository,
+            IRepository<TicketInOrder> ticketInOrderRepository)
         {
             _userRepository = userRepository;
             _ticketRepository = ticketRepository;
             _shoppingCartRepository = shoppingCartRepository;
+            _orderRepository = orderRepository;
+            _ticketInOrderRepository = ticketInOrderRepository;
         }
 
         public ShoppingCart AddTicketToShoppingCart(string userId, AddToShoppingCartDTO model)
@@ -114,6 +120,49 @@ namespace EMS.Service.Implementation
                 return model;
             }
             return null;
+        }
+
+        public bool OrderTickets(string userId)
+        {
+            if (userId != null  && !userId.IsNullOrEmpty())
+            {
+                var loggedInUser = _userRepository.Get(userId);
+                var userCart = loggedInUser?.ShoppingCart;
+                var userOrder = new Order
+                {
+                    Id = Guid.NewGuid(),
+                    OwnerId = userId,
+                    Owner = loggedInUser
+                };
+                _orderRepository.Insert(userOrder);
+                
+                var ticketsInOrder = userCart?.TicketsInShoppingCart.Select(z => new TicketInOrder
+                {
+                    Order = userOrder,
+                    OrderId = userOrder.Id,
+                    TicketId = z.TicketId,
+                    Ticket = z.Ticket,
+                    Quantity = z.Quantity
+                });
+                
+                var totalPrice = 0.0;
+                for (int i = 1; i <= ticketsInOrder.Count(); i++) 
+                {
+                    var currentItem = ticketsInOrder.ElementAt(i-1);
+                    totalPrice += currentItem.Quantity * currentItem?.Ticket?.TicketPrice ?? 0;
+                }
+
+                foreach (var ticket in ticketsInOrder)
+                {
+                    _ticketInOrderRepository.Insert(ticket);
+                }
+
+                userCart?.TicketsInShoppingCart.Clear();
+                _shoppingCartRepository.Update(userCart);
+
+                return true;
+            }
+            return false;
         }
     }
 }

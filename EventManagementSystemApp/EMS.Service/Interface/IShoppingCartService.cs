@@ -14,5 +14,6 @@ namespace EMS.Service.Interface
         AddToShoppingCartDTO GetTicketInfo(Guid id);
         ShoppingCart AddTicketToShoppingCart(string userId, AddToShoppingCartDTO model);
         bool DeleteFromShoppingCart(string userId, Guid? id);
+        bool OrderTickets(string userId);
     }
 }
