@@ -1,0 +1,38 @@
+﻿@model Order
+
+
+<div class="container">
+    <div>
+        <p class="fs-4">Order for @Model.Owner.FirstName @Model.Owner.LastName</p>
+        <hr />
+    </div>
+
+    @for(int i=0;i<Model.TicketsInOrder.Count(); i++)
+    {
+        var item = Model.TicketsInOrder.ElementAt(i).Ticket;
+        var quantity = Model.TicketsInOrder.ElementAt(i).Quantity;
+        var totalPrice = 0.0;
+        if(i % 3 == 0)
+        {
+            @:<div class="row d-flex justify-content-center">
+        }
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 m-4">
+
+            <div class="card" style="width: 18rem; min-height: 22rem">
+                <img style="height:12rem; object-fit:cover" class="card-img-top" src="@item.ScheduledEvent.ScheduledEventImage" alt="Card image cap">
+                <div class="card-body">
+                    <h6 class="card-title">@item.ScheduledEvent.Event.EventName</h6>
+                    <p class="card-text">Date: @item.ScheduledEvent.EventNameDisplay</p>
+                    @{totalPrice = quantity * item.TicketPrice;}
+                    <h6 class="text-danger">Price: @totalPrice MKD</h6>
+                </div>
+
+            </div>
+        </div>
+
+        if(i % 3 == 2)
+        {
+            @:</div>
+        }
+    }
+</div>

@@ -22,15 +22,18 @@ builder.Services.AddDefaultIdentity<Attendee>(options => options.SignIn.RequireC
 
 // Add other services, like MVC or Razor Pages
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 
 builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<IScheduledEventService, ScheduledEventService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
 builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 var app = builder.Build();
 
