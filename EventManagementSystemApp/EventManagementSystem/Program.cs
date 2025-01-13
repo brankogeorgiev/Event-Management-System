@@ -1,10 +1,12 @@
 using EMS.Domain.Identity;
+using EMS.Domain.Settings;
 using EMS.Repository;
 using EMS.Repository.Implementation;
 using EMS.Repository.Interface;
 using EMS.Service.Implementation;
 using EMS.Service.Interface;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // Register the ApplicationDbContext with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 // Add Identity services with custom Attendee class
 builder.Services.AddDefaultIdentity<Attendee>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -29,7 +33,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 
-builder.Services.AddTransient<IEventService, EventService>();
+builder.Services.AddTransient<IEventService, EMS.Service.Implementation.EventService>();
 builder.Services.AddTransient<IScheduledEventService, ScheduledEventService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
 builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
