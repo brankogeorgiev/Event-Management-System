@@ -18,18 +18,21 @@ namespace EMS.Service.Implementation
         private readonly IRepository<ShoppingCart> _shoppingCartRepository;
         private readonly IRepository<Order> _orderRepository;
         private readonly IRepository<TicketInOrder> _ticketInOrderRepository;
+        private readonly IEmailService _emailService;
 
         public ShoppingCartService(IUserRepository userRepository, 
             IRepository<Ticket> ticketRepository,
             IRepository<ShoppingCart> shoppingCartRepository,
             IRepository<Order> orderRepository,
-            IRepository<TicketInOrder> ticketInOrderRepository)
+            IRepository<TicketInOrder> ticketInOrderRepository, 
+            IEmailService emailService)
         {
             _userRepository = userRepository;
             _ticketRepository = ticketRepository;
             _shoppingCartRepository = shoppingCartRepository;
             _orderRepository = orderRepository;
             _ticketInOrderRepository = ticketInOrderRepository;
+            _emailService = emailService;
         }
 
         public ShoppingCart AddTicketToShoppingCart(string userId, AddToShoppingCartDTO model)
@@ -128,6 +131,11 @@ namespace EMS.Service.Implementation
             {
                 var loggedInUser = _userRepository.Get(userId);
                 var userCart = loggedInUser?.ShoppingCart;
+
+                EmailMessage message = new EmailMessage();
+                message.Subject = "Successfull order";
+                message.MailTo = loggedInUser.Email;
+
                 var userOrder = new Order
                 {
                     Id = Guid.NewGuid(),
@@ -144,13 +152,19 @@ namespace EMS.Service.Implementation
                     Ticket = z.Ticket,
                     Quantity = z.Quantity
                 });
-                
+
+                StringBuilder sb = new StringBuilder();
                 var totalPrice = 0.0;
+                sb.AppendLine("Your order is completed. The order contains: ");
+
                 for (int i = 1; i <= ticketsInOrder.Count(); i++) 
                 {
                     var currentItem = ticketsInOrder.ElementAt(i-1);
                     totalPrice += currentItem.Quantity * currentItem?.Ticket?.TicketPrice ?? 0;
+                    sb.AppendLine(i.ToString() + ". " + currentItem.Ticket.TicketDisplayString + " with quantity of: " + currentItem.Quantity + ", and price of: " + currentItem.Ticket.TicketPrice + " MKD");
                 }
+                sb.AppendLine("Total price for your order: " + totalPrice.ToString());
+                message.Content = sb.ToString();
 
                 foreach (var ticket in ticketsInOrder)
                 {
@@ -160,6 +174,7 @@ namespace EMS.Service.Implementation
                 userCart?.TicketsInShoppingCart.Clear();
                 _shoppingCartRepository.Update(userCart);
 
+                _emailService.SendEmailAsync(message);
                 return true;
             }
             return false;
