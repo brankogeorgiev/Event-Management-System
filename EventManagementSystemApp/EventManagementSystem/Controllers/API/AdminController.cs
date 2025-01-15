@@ -12,13 +12,55 @@ namespace EMS.Web.Controllers.API
     public class AdminController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly IEventService _eventService;
+        private readonly IScheduledEventService _scheduledEventService;
+        private readonly ITicketService _ticketService;
         private readonly UserManager<Attendee> _userManager;
 
-        public AdminController(IOrderService orderService, UserManager<Attendee> userManager)
+        public AdminController(IOrderService orderService, 
+            IEventService eventService,
+            IScheduledEventService scheduledEventService,
+            ITicketService ticketService,
+            UserManager<Attendee> userManager)
         {
             _orderService = orderService;
+            _eventService = eventService;
+            _scheduledEventService = scheduledEventService;
+            _ticketService = ticketService;
             _userManager = userManager;
         }
+
+        [HttpGet("[action]")]
+        public List<Order> GetAllOrders()
+        {
+            return _orderService.GetAllOrders();
+        }
+
+        [HttpGet("[action]")]
+        public List<Event> GetAllEvents()
+        {
+            return _eventService.GetAllEvents();
+        }
+
+        [HttpGet("[action]")]
+        public List<ScheduledEvent> GetAllScheduledEvents()
+        {
+            return _scheduledEventService.GetAllScheduledEvents();
+        }
+
+        [HttpGet("[action]")]
+        public List<Ticket> GetAllTickets()
+        {
+            return _ticketService.GetAllTickets().ToList();
+        }
+
+        [HttpPost("[action]")]
+        public Order GetDetailsForOrder(BaseEntity model)
+        {
+            return _orderService.GetOrderDetails(model);
+        }
+
+
 
         [HttpPost("[action]")]
         public bool ImportAllAttendees(List<AttendeeRegistrationDto> attendees)
@@ -51,18 +93,6 @@ namespace EMS.Web.Controllers.API
                 }
             }
             return status;
-        }
-
-        [HttpGet("[action]")]
-        public List<Order> GetAllOrders()
-        {
-            return _orderService.GetAllOrders();
-        }
-
-        [HttpPost("[action]")]
-        public Order GetDetailsForOrder(BaseEntity model)
-        {
-            return _orderService.GetOrderDetails(model);
         }
     }
 }

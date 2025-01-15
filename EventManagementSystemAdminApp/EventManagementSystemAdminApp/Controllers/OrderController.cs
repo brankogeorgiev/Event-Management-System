@@ -1,4 +1,5 @@
-﻿using EventManagementSystemAdminApp.Models;
+﻿using ClosedXML.Excel;
+using EventManagementSystemAdminApp.Models;
 using GemBox.Document;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -40,6 +41,55 @@ namespace EventManagementSystemAdminApp.Controllers
             var data = response.Content.ReadAsAsync<Order>().Result;
 
             return View(data);
+        }
+
+        [HttpGet]
+        public FileContentResult ExportAllOrders()
+        {
+            string fileName = "Orders.xlsx";
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+            using (var workbook = new XLWorkbook())
+            {
+                IXLWorksheet worksheet = workbook.Worksheets.Add("All Orders");
+                worksheet.Cell(1, 1).Value = "Order ID";
+                worksheet.Cell(1, 2).Value = "Customer Email";
+                
+                HttpClient client = new HttpClient();
+                string URL = "https://localhost:44304/Api/Admin/GetAllOrders";
+                HttpResponseMessage message = client.GetAsync(URL).Result;
+                var result = message.Content.ReadAsAsync<List<Order>>().Result;
+
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    var item = result.ElementAt(i);
+
+                    worksheet.Cell(i + 2, 1).Value = item.Id.ToString();
+                    worksheet.Cell(i + 2, 2).Value = item.Owner.Email.ToString();
+
+                    var ticketColumn = 3;
+                    for (int j = 0; j < item.TicketsInOrder.Count(); j++)
+                    {
+                        var ticket = item.TicketsInOrder.ElementAt(j);
+
+                        worksheet.Cell(1, ticketColumn).Value = "Ticket-" + (j + 1);
+                        worksheet.Cell(1, ticketColumn + 1).Value = "Quantity for Ticket-" + (j + 1);
+
+                        worksheet.Cell(i + 2, ticketColumn).Value = ticket.Ticket.TicketDisplayString;
+                        worksheet.Cell(i + 2, ticketColumn + 1).Value = ticket.Quantity;
+
+                        ticketColumn += 2;
+                    }
+                }
+                
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    return File(content, contentType, fileName);
+                }
+            }
         }
 
         public FileContentResult CreateInvoice(Guid orderId)
