@@ -10,6 +10,7 @@ using EMS.Repository;
 using EMS.Domain.DTO;
 using EMS.Service.Interface;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EMS.Web.Controllers
 {
@@ -161,6 +162,7 @@ namespace EMS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public IActionResult AddToShoppingCart(Guid id)
         {
             var result = _shoppingCartService.GetTicketInfo(id);
@@ -171,6 +173,7 @@ namespace EMS.Web.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult AddToShoppingCart(AddToShoppingCartDTO model)
         {

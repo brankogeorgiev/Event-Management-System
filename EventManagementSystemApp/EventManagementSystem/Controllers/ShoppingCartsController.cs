@@ -2,6 +2,7 @@
 using EMS.Domain.Models;
 using EMS.Domain.Settings;
 using EMS.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Stripe;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 
 namespace EMS.Web.Controllers
 {
+    [Authorize]
     public class ShoppingCartsController : Controller
     {
         private readonly IShoppingCartService _shoppingCartService;
