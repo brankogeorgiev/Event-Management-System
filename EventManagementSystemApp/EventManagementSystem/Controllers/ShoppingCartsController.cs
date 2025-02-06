@@ -98,5 +98,15 @@ namespace EMS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public JsonResult GetCartItemCount()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
+            var cartItems = _shoppingCartService.GetShoppingCartDetails(userId ?? "").AllTickets;
+
+            int itemCount = cartItems?.Count() ?? 0;
+            return Json(new { count = itemCount });
+        }
     }
 }

@@ -79,6 +79,13 @@
   --bs-highlight-bg: #fff3cd;
 }
 
+#cart-count {
+    display: inline-block !important;
+    min-width: 20px;
+    min-height: 20px;
+    text-align: center;
+}
+
 *,
 *::before,
 *::after {

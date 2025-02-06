@@ -52,3 +52,45 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const cartCountElement = document.getElementById("cart-count");
+
+    fetch('/ShoppingCarts/GetCartItemCount') // Adjust the API endpoint accordingly
+        .then(response => response.json())
+        .then(data => {
+            console.log("Cart Count Response:", data); // Debugging: Check if data is correct
+
+            if (data.count > 0) {
+                cartCountElement.textContent = data.count;
+                cartCountElement.style.display = "inline-block"; // Ensure it's visible
+            } else {
+                cartCountElement.style.display = "none"; // Hide if cart is empty
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching cart count:", error);
+            cartCountElement.style.display = "none"; // Hide in case of an error
+        });
+});
+
+function updateCartCount() {
+    fetch('/ShoppingCarts/GetCartItemCount')
+        .then(response => response.json())
+        .then(data => {
+            const cartCountElement = document.getElementById("cart-count");
+
+            if (data.count > 0) {
+                cartCountElement.textContent = data.count;
+                cartCountElement.style.display = "inline-block";
+            } else {
+                cartCountElement.style.display = "none";
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching cart count:", error);
+        });
+}
+
+// Run on page load and every 10 seconds
+document.addEventListener("DOMContentLoaded", updateCartCount);
+setInterval(updateCartCount, 2000);
