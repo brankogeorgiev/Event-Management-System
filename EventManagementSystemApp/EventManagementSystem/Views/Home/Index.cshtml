@@ -2,7 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+ <header class="masthead bg-primary text-white text-center py-5">
+     <div class="container d-flex align-items-center flex-column">
+         <img class="rounded masthead-avatar mb-5" src="~/assets/img/portfolio/background.png" alt="Avatar" />
+         <h3 class=""><b>EventEase</b> – Your Ultimate Event Management Solution</h3>
+         <p class="mt-3">EventEase is a powerful and intuitive event management application designed to simplify the way users discover, schedule, and manage events. Whether it's concerts, corporate gatherings, parties, or exclusive meetups, EventEase provides a seamless experience for both organizers and attendees.</p>
+         <p class="mt-3 fs-5"><b>Join EventEase today and never miss an event again! 🎉🎟️🚀</b></p>
+         <a asp-controller="Events" asp-action="Index" class="mt-3 btn btn-secondary text-white fs-5">Browse Events!</a>
+     </div>
+ </header>
