@@ -4,11 +4,11 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Ticket Details</h1>
-
-<div>
-    <hr />
-    <dl class="row">
+<div class="container p-3">
+    <div class="w-75 m-auto rounded p-5 bg-white">
+        <h4 class="text-center text-secondary">Ticket Details</h4>
+        <hr />
+        <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TicketPrice)
         </dt>
@@ -20,11 +20,13 @@
         </dt>
         <dd class = "col-sm-10">
             @Model.TicketDisplayString
-            @* @Model.ScheduledEvent.Event.EventName: @Model.ScheduledEvent.ScheduledEventLocation - @Model.ScheduledEvent.ScheduledEventDateTime.Value.ToString("MM/dd/yy, HH:mm") *@
         </dd>
     </dl>
+    <div class="ps-3">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a> |
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
