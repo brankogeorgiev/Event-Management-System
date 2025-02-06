@@ -1,0 +1,88 @@
+﻿@model List<EMS.Domain.PartnerModels.Book>
+
+<div class="container p-3">
+    <div class="bg-white text-center w-75 m-auto p-5 rounded">
+        <h3>Check out our Partner Books at Discounted Price</h3>
+        <hr/>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var item = Model.ElementAt(i);
+            <div class="container row border py-3 mx-auto my-2 rounded-3">
+                <div class="col-4">
+                    <img class="rounded-3" src="@item.image" width="80%" alt="@item.title" />
+                </div>
+                <div class="col-6 mx-auto">
+                    <dl class="row">
+                        <dt class="col-3 text-start">Title:</dt>
+                        <dd class="col-9 text-start">@item.title</dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-3 text-start">Description:</dt>
+                        <dd class="col-9 text-start">@item.description</dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-3 text-start">Price:</dt>
+                        <dd class="col-9 text-start">
+                            <span class="h5">@((item.price - item.price / 5)?.ToString("F1")) MKD</span>
+                            <del style="font-size: 0.75rem;">@item.price?.ToString("F1") MKD</del>
+                            <b class="text-danger">(-20%)</b>
+                        </dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-3 text-start">Rating:</dt>
+                        <dd class="col-9 text-start">
+                            @for (int j = 0; j < item.rating; j++)
+                            {
+                                <i style="color: #D49B00;" class="bi bi-star-fill mx-1"></i>
+                            }
+                            @for (int j = 0; j < 10 - item.rating; j++)
+                            {
+                                <i style="color: #D49B00;" class="bi bi-star mx-1"></i>
+                            }
+                            (@item.rating?.ToString("F1"))
+                        </dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-3 text-start">Genre:</dt>
+                        <dd class="col-9 text-start">@item.genre</dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-3 text-start">Author:</dt>
+                        <dd class="col-9 text-start">
+                            @(item.author.name.Substring(0,1).ToUpper() + item.author.name.Substring(1).ToLower())
+                            @(item.author.surname.Substring(0, 1).ToUpper() + item.author.surname.Substring(1).ToLower())
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        }
+        @* <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Rating</th>
+                    <th>Genre</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    var item = Model.ElementAt(i);
+                    <tr>
+                        <td>@(i+1)</td>
+                        <td>@item.title</td>
+                        <td>@item.description</td>
+                        <td>@item.price MKD</td>
+                        <td>@item.rating STAR</td>
+                        <td>@item.genre</td>
+                        <td>@item.author.name @item.author.surname</td>
+                    </tr>
+                }
+            </tbody>
+        </table> *@
+    </div>
+</div>
