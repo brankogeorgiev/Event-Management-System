@@ -1,2 +1,5 @@
 # EventManagementSystem
-[![Watch the video](https://img.youtube.com/vi/5SePW5Xxa30/0.jpg)](https://www.youtube.com/watch?v=5SePW5Xxa30)
+
+Link to video below:
+
+https://github.com/user-attachments/assets/7684e907-c52d-423b-9dd4-2b64da0de191
