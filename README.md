@@ -1,2 +1,2 @@
 # EventManagementSystem
-[Watch the video](https://drive.google.com/drive/home?sjid=16474669496727607215-EU)
+[![Video](https://www.youtube.com/watch?v=5SePW5Xxa30/0.jpg)](https://www.youtube.com/watch?v=5SePW5Xxa30)
